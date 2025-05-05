@@ -30,6 +30,7 @@ def get_movie(title: str) -> Movie | None:
             data.get("Title"),
             data.get("Year"),
             data.get("Genre"),
+            data.get("Type"),
             data.get("Director"),
             data.get("imdbRating")
             )
