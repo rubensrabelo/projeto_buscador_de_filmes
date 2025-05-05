@@ -6,27 +6,27 @@ from schemas.movie import Movie
 
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")
-BASE_URL = "http://www.omdbapi.com/"
+API_KEY: str = os.getenv("API_KEY")
+BASE_URL: str = "http://www.omdbapi.com/"
 
 
-def get_movie(title):
+def get_movie(title: str) -> Movie | None:
     if not API_KEY:
         print("API_KEY não encontrada. Verifique seu .env.")
         return
 
-    params = {
+    params: dict[str, str] = {
         "t": title,
         "apikey": API_KEY
     }
 
     try:
-        response = requests.get(BASE_URL, params=params)
+        response: requests.Response = requests.get(BASE_URL, params=params)
         response.raise_for_status()
 
-        data = response.json()
+        data: dict[str, str | float] = response.json()
 
-        movie = Movie(
+        movie: Movie = Movie(
             data.get("Title"),
             data.get("Year"),
             data.get("Genre"),

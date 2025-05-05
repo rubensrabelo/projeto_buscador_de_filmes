@@ -1,13 +1,14 @@
 from api.omdb_api import get_movie
+from schemas.movie import Movie
 
 
 def main():
     while True:
-        title = input("\nDigite o nome de um filme (ou 'sair'): ").strip()
+        title: str = input("\nDigite o nome de um filme (ou 'sair'): ").strip()
         if title.lower() == 'sair':
             break
 
-        movie = get_movie(title.replace(" ", "+"))
+        movie: Movie = get_movie(title.replace(" ", "+"))
 
         if movie:
             print(movie)
