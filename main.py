@@ -1,17 +1,30 @@
-from api.omdb_api import get_movie
+from api.omdb_api import get_movie, search_movies_by_keyword
 from schemas.movie import Movie
 
 
-def main():
+def main() -> None:
     while True:
-        title: str = input("\nDigite o nome de um filme (ou 'sair'): ").strip()
-        if title.lower() == 'sair':
+        print("\nEscolha: \n[1] Buscar por título\n[2] Buscar por palavra-chave\n[3] Sair: ")
+        opcao = input("Digite aqui: ")
+
+        if opcao == "1":
+            title = input("Digite o título do filme: ").strip()
+            movie = get_movie(title)
+            if movie:
+                print(movie)
+
+        elif opcao == "2":
+            keyword = input("Digite uma palavra-chave: ").strip()
+            movies = search_movies_by_keyword(keyword)
+            if movies:
+                for m in movies:
+                    print(m)
+        
+        elif opcao == "3":
             break
 
-        movie: Movie = get_movie(title.replace(" ", "+"))
-
-        if movie:
-            print(movie)
+        else:
+            print("Opção inválida. Tente novamente.")
 
 
 if __name__ == "__main__":
