@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-from schemas.movie import Movie
+from schemas.movie import MovieBase, MovieDetail
 
 load_dotenv()
 
@@ -10,7 +10,7 @@ API_KEY: str = os.getenv("API_KEY")
 BASE_URL: str = "http://www.omdbapi.com/"
 
 
-def get_movie(title: str) -> Movie | None:
+def get_movie(title: str) -> MovieDetail | None:
     if not API_KEY:
         print("API_KEY não encontrada. Verifique seu .env.")
         return
@@ -30,7 +30,7 @@ def get_movie(title: str) -> Movie | None:
             print(data.get("Error", "Erro ao buscar filme."))
             return None
 
-        return Movie(
+        return MovieDetail(
             data.get("Title"),
             data.get("Year"),
             data.get("Genre"),
@@ -43,7 +43,7 @@ def get_movie(title: str) -> Movie | None:
     return
 
 
-def search_movies_by_keyword(keyword: str) -> list[Movie] | None:
+def search_movies_by_keyword(keyword: str) -> list[MovieBase] | None:
     if not API_KEY:
         print("API_KEY não encontrada. Verifique seu .env.")
         return
@@ -65,13 +65,10 @@ def search_movies_by_keyword(keyword: str) -> list[Movie] | None:
         search_results: list[dict[str, str]] = data.get("Search", [])
 
         return [
-            Movie(
+            MovieBase(
                 movie.get("Title"),
                 movie.get("Year"),
-                movie.get("Genre"),
                 movie.get("Type"),
-                movie.get("Director"),
-                movie.get("imdbRating")
             )
             for movie in search_results
         ]
